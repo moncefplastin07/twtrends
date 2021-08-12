@@ -1,4 +1,4 @@
-import { DOMParser } from "./deps.ts";
+import { DOMParser, parseDate } from "./deps.ts";
 import { getPageSourceCode } from "./utils.ts";
 export const getTrendList = async (area: string = "") => {
   const getPageResponse = await getPageSourceCode(area);
@@ -24,9 +24,7 @@ export const getTrendList = async (area: string = "") => {
       },
     );
     trends.push({
-      timestamp:
-        card.querySelector(".trend-card__time").attributes["data-timestamp"],
-      time_ago: card.querySelector(".trend-card__time").innerText,
+      last_update: parseDate(card.querySelector(".trend-card__time").innerText, 'dd-MM-yyyy HH:mm:ss'),
       topics,
     });
   });
