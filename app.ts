@@ -1,12 +1,12 @@
 import { parse } from "./deps.ts";
 import { getTrendList } from "./trends.ts";
-const { args } = Deno;
+const { args, listen, serveHttp } = Deno;
 const port = parse(args).port;
-const listener = Deno.listen({ port });
+const listener = listen({ port });
 console.log(`http://localhost:${port}/`);
 for await (const conn of listener) {
   (async () => {
-    const requests = Deno.serveHttp(conn);
+    const requests = serveHttp(conn);
     for await (const { respondWith, request } of requests) {
       const requestUrl = new URL(request.url);
       respondWith(
