@@ -3,9 +3,9 @@ import { getPageSourceCode } from "./utils.ts";
 export const getTrendList = async (area: string = "") => {
   const getPageResponse = await getPageSourceCode(area);
   if (!getPageResponse.succes) {
-     return getPageResponse
+    return getPageResponse;
   }
-  const pageSourceCode = getPageResponse.sourceCode || ""
+  const pageSourceCode = getPageResponse.sourceCode || "";
   const document = new DOMParser().parseFromString(
     pageSourceCode,
     "text/html",
@@ -18,13 +18,21 @@ export const getTrendList = async (area: string = "") => {
   };
   const trends: any[] = [];
   trendCardsDom.forEach((card: any) => {
-    const topics = [...card.querySelectorAll(".trend-card__list a")].map(
+    const topics = [...card.querySelectorAll(".trend-card__list li")].map(
       (element: any, index: number) => {
-        return { index: index + 1, text: element.innerText, url: element.getAttribute('href') };
+        return {
+          index: index + 1,
+          text: element?.querySelector("a")?.innerText,
+          url: element?.querySelector("a")?.getAttribute("href"),
+          tweets_count: element?.querySelector('span.tweet-count')?.innerText
+        };
       },
     );
     trends.push({
-      last_update: parseDate(card.querySelector(".trend-card__time").innerText, 'dd-MM-yyyy HH:mm:ss'),
+      last_update: parseDate(
+        card.querySelector(".trend-card__time").innerText,
+        "dd-MM-yyyy HH:mm:ss",
+      ),
       topics,
     });
   });
