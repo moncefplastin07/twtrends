@@ -1,7 +1,7 @@
-import { parse } from "./deps.ts";
+import { parseArgs } from "./deps.ts";
 import { getTrendList } from "./trends.ts";
 const { args, listen, serveHttp } = Deno;
-const port = parse(args).port;
+const port = parseArgs(args).port;
 const listener = listen({ port });
 console.log(`http://localhost:${port}/`);
 for await (const conn of listener) {
